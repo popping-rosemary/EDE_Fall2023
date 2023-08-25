@@ -77,7 +77,7 @@ print(df)
 11. Apply your function to the vector with test scores that you created in number 5.
 
 ```{r basics 3 using ifelse statement}
-# Create a function to print whether a given score has pass the test. 
+# Create a function to print whether a given score has pass the test using "ifelse" statement 
 f_pass <- function(test_score){
   ifelse(test_score >= 50, print(TRUE), print(FALSE) )
 }
@@ -90,7 +90,7 @@ for (i in score){
 
 
 ```{r basics 3 using if and else statement}
-# Create a function to print whether a given score has pass the test. 
+# Create a function to print whether a given score has pass the test using "if" and "else statements 
 f_pass <- function(test_score){
   if (test_score >= 50){print(TRUE)}
   else{print(FALSE)}
@@ -103,4 +103,4 @@ for (i in score){
 ```
 12. QUESTION: Which option of `if` and `else` vs. `ifelse` worked? Why?
 
-> Answer: Both worked. 
+> Answer: Both worked. Because the logic behind the two statements are necessrily the same. "ifelse" statement condenses the "if...else..." statements into one line. 
