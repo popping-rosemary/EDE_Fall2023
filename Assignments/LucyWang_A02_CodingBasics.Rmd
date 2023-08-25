@@ -59,12 +59,12 @@ mean_num > median_num
 ```{r basics 2}
 # Assign data to vectors 
 stu_name <- c("Lucy", "Wilson", "Anne", "Tim") #character 
-score <- c(100, 80, 60, 45) #double
+score <- c(100, 80, 60, 45) #numeric
 pass_test <- score >= 50 #logical
 
 # Combine vectors to a data frame
-df <- data.frame(stu_name, score, pass_test) 
-names(df) <- c("student_name", "test_score", "pass_test")
+df <- data.frame("student_name" = stu_name, "test_score" = score, "pass_test" = pass_test) 
+# or, names(df) <- c("student_name", "test_score", "pass_test")
 print(df)
 ```
 
