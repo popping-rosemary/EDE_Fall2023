@@ -32,7 +32,7 @@ The completed exercise is due on Thursday, Sept 28th @ 5:00pm.
 
 ```{r setup, message = FALSE}
 #1a 
-library(tidyverse)
+library(tidyverse) 
 library(lubridate)
 library(here)
 #1b 
@@ -133,6 +133,16 @@ write.csv(EPAair.PM25.NC2019.processed,
 EPAair.O3.PM25.NC1819 <- rbind(EPAair.O3.NC2018.processed, EPAair.O3.NC2019.processed, EPAair.PM25.NC2018.processed, EPAair.PM25.NC2019.processed)
 
 #8 
+EPAair.conditional <- 
+  EPAair.O3.PM25.NC1819 %>%
+  filter(Site.Name %in% c("Linville Falls", "Durham Armory", "Leggett", "Hattie Avenue", "Clemmons Middle", "Mendenhall School", "Frying Pan Mountain", "West Johnston Co.", "Garinger High School", "Castle Hayne", "Pitt Agri. Center", "Bryson City", "Millbrook School")) %>% 
+  group_by(Date, Site.Name, AQS_PARAMETER_DESC, COUNTY) %>% 
+  summarise(across(c(DAILY_AQI_VALUE, SITE_LATITUDE, SITE_LONGITUDE), mean, .groups = 'keep'))
+  summarise(avg.latitude = mean(SITE_LATITUDE))
+  mutate('Month' = month(ymd(EPAair.conditional$Date))) %>%
+  mutate('Year' = year(ymd(EPAair.conditional$Date))) %>%
+  
+  
 
 #9
 
