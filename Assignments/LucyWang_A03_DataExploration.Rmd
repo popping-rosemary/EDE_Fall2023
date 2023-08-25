@@ -33,15 +33,16 @@ This exercise accompanies the lessons in Environmental Data Analytics on Data Ex
 1.  Check your working directory, load necessary packages (tidyverse, lubridate), and upload two datasets: the ECOTOX neonicotinoid dataset (ECOTOX_Neonicotinoids_Insects_raw.csv) and the Niwot Ridge NEON dataset for litter and woody debris (NEON_NIWO_Litter_massdata_2018-08_raw.csv). Name these datasets "Neonics" and "Litter", respectively. Be sure to include the subcommand to read strings in as factors.
 
 ```{r data_prep,  message = FALSE}
-getwd() # check oriking directory
-library(tidyverse) #load packages 
+# check working directory
+getwd()
+
+#load packages
+library(tidyverse)  
 library(lubridate)
+
+# read datasets as dataframes, read strings as factors 
 Neonics <- read.csv('./Data/Raw/ECOTOX_Neonicotinoids_Insects_raw.csv', stringsAsFactors = T)
-# Neonics[sapply(Neonics, is.character)] <- lapply(Neonics[sapply(Neonics, is.character)], 
-                                       #as.factor)
 Litter <- read.csv('./Data/Raw/NEON_NIWO_Litter_massdata_2018-08_raw.csv', stringsAsFactors = T)
-#Litter[sapply(Litter, is.character)] <- lapply(Litter[sapply(Litter, is.character)], 
-                                   #    as.factor)
 ```
 
 ## Learn about your system
@@ -57,9 +58,9 @@ Litter <- read.csv('./Data/Raw/NEON_NIWO_Litter_massdata_2018-08_raw.csv', strin
 4.  How is litter and woody debris sampled as part of the NEON network? Read the NEON_Litterfall_UserGuide.pdf document to learn more. List three pieces of salient information about the sampling methods here:
 
 > Answer: 
- 1. The sampling is done at NEON sites that have woody vegetations above 2 meters tall. There are forested sites and sites with low-statured vegetation.  
- 2. The sizes of plots for samplings differ among sites, and the trap placement depends on vegetation (forested or low-statured).  
- 3. Sampling frequency for ground traps is once a year, while the sampling frequency for elevated traps varies depending on vegetations.  
+ 1. The sampling is done at NEON sites, and the litter is divided into 8 function groups. 
+ 2. The spatial relationship between traps, subplots, plots, sites, and domains explains the coding method for locations. 
+ 3. The sampling is done at NEON sites taht have woody vegetations above 2 meters tall. There are forested sites and sites with low-statured vegetation. 
 
 ## Obtain basic summaries of your data (Neonics)
 
@@ -71,8 +72,8 @@ colnames(Neonics) #call out the column names of the dataset
 
 6.  Using the `summary` function on the "Effect" column, determine the most common effects that are studied. Why might these effects specifically be of interest?
 
-```{r}
-summary(Neonics$Effect)
+```{r summarize_effect}
+summary(Neonics$Effect) # Summarize 'Effect' column
 ```
 
 > Answer: The most common effects that are studied are Poplulation (1803) and Mortality (1493). Neonicotinoids may lead to vital effects that impose significant threats on the eco-health and food security for huamns. Decrease in insect population and insects' deaths are the two most direct causes to ecological harm and uncentain food production for all species. 
@@ -80,8 +81,11 @@ summary(Neonics$Effect)
 
 7.  Using the `summary` function, determine the six most commonly studied species in the dataset (common name). What do these species have in common, and why might they be of interest over other insects? Feel free to do a brief internet search for more information if needed.[TIP: The `sort()` command can sort the output of the summary command...]
 
-```{r}
+```{r summarize_species}
+# Summarize species common name in the dataset. Assign to a dataframe called 'Species.data'
 Species.data <- as.data.frame(summary(Neonics$`Species.Common.Name`))
+
+# list 6 most common studied species in the dataset 
 head(Species.data,6)
 ```
 
@@ -89,7 +93,8 @@ head(Species.data,6)
 
 8.  Concentrations are always a numeric value. What is the class of `Conc.1..Author.` column in the dataset, and why is it not numeric?
 
-```{r}
+```{r class_author}
+# check the class of 'Conc.1..Author' 
 class(Neonics$Conc.1..Author)
 ```
 
@@ -99,17 +104,16 @@ class(Neonics$Conc.1..Author)
 
 9.  Using `geom_freqpoly`, generate a plot of the number of studies conducted by publication year.
 
-```{r}
+```{r freqpoly_publication_year}
+# generate a frequency polygon that shows the number of studies conducted by publication year
 ggplot(Neonics) + 
   geom_freqpoly(aes(x=Publication.Year),stat='count') 
-  xlab('Publication Year')+
-  ylab('Count')
-    
 ```
 
 10. Reproduce the same graph but now add a color aesthetic so that different Test.Location are displayed as different colors.
 
-```{r}
+```{r freqpoly_pulication_year_color}
+# generate a frequency polygon that shows the number of studies conducted by publication year, displayed in different colors by Test.Location 
 ggplot(Neonics) + 
   geom_freqpoly(aes(x=Publication.Year, color = Test.Location),stat='count') +
   xlab('Publication Year')+
@@ -124,27 +128,32 @@ Interpret this graph. What are the most common test locations, and do they diffe
 
 [**TIP**: Add `theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))` to the end of your plot command to rotate and align the X-axis labels...]
 
-```{r}
+```{r bargraph_endpoint}
+# generate a bar graph of Endpoint counts, adjust the x-axis lables to fit the graph. 
 ggplot(Neonics) +
-  geom_boxplot(aes(x=Endpoint), stat='count') + 
+  geom_bar(aes(x=Endpoint), stat='count') + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ```
 
-> Answer:
+> Answer: The most common end points are NOEL and LOEL, which is each defined as no-observable-effect-level and lowest-observable-effect-level for terrestrial database usage. 
 
 ## Explore your data (Litter)
 
 12. Determine the class of collectDate. Is it a date? If not, change to a date and confirm the new class of the variable. Using the `unique` function, determine which dates litter was sampled in August 2018.
 
-```{r}
+```{r class_collectdate}
+# the class of collectDate was a factor. Change to Date. 
 Litter$collectDate <- ymd(Litter$collectDate)
-class(Litter$collectDate)
+class(Litter$collectDate) # test the class again 
+
+# Find which dates litter was sampled in 2018/08
 unique(Litter$collectDate)
 ```
 
 13. Using the `unique` function, determine how many plots were sampled at Niwot Ridge. How is the information obtained from `unique` different from that obtained from `summary`?
 
-```{r}
+```{r num_plots}
+# Find how many plots were sampled at Niwot Ridge 
 unique(Litter$plotID)
 summary(Litter$plotID)
 ```
@@ -153,17 +162,20 @@ summary(Litter$plotID)
 
 14. Create a bar graph of functionalGroup counts. This shows you what type of litter is collected at the Niwot Ridge sites. Notice that litter types are fairly equally distributed across the Niwot Ridge sites.
 
-```{r}
+```{r barrgraph_functional_group}
+# generate a bar graph of functionalGroup counts to show the types of litter collected 
 ggplot(Litter)+
   geom_bar(aes(x=functionalGroup), stat = 'count')
 ```
 
 15. Using `geom_boxplot` and `geom_violin`, create a boxplot and a violin plot of dryMass by functionalGroup.
 
-```{r}
+```{r boxplot_drymass_functionalGroup}
+# generate a boxplot of dryMass by functionalGroup 
 ggplot(Litter)+ 
   geom_boxplot(aes(x=functionalGroup, y=dryMass, fill = functionalGroup))
 
+# generate a violin graph of dryMass by functionalGroup 
 ggplot(Litter)+
   geom_violin(aes(x=functionalGroup, y=dryMass, fill = functionalGroup))
 ```
