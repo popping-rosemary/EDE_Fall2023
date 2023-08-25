@@ -130,6 +130,7 @@ write.csv(EPAair.PM25.NC2019.processed,
 
 ```{r}
 #7 
+EPAair.O3.PM25.NC1819 <- rbind(EPAair.O3.NC2018.processed, EPAair.O3.NC2019.processed, EPAair.PM25.NC2018.processed, EPAair.PM25.NC2019.processed)
 
 #8 
 
