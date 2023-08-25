@@ -1,6 +1,6 @@
 ---
 title: "Assignment 4: Data Wrangling"
-author: "Student Name"
+author: "Lucy Wang"
 output: pdf_document
 geometry: margin=2.54cm
 ---
@@ -32,13 +32,36 @@ The completed exercise is due on Thursday, Sept 28th @ 5:00pm.
 
 ```{r setup, message = FALSE}
 #1a 
-
+library(tidyverse)
+library(lubridate)
+library(here)
 #1b 
-
+here()
 #1c 
+EPAair.O3.NC2018 <- read.csv(
+  file = here('Data/Raw/EPAair_O3_NC2018_raw.csv'), 
+  stringsAsFactors = T
+)
 
+EPAair.O3.NC2019 <- read.csv(
+  file = here('Data/Raw/EPAair_O3_NC2019_raw.csv'), 
+  stringsAsFactors = T
+)
+
+EPAair.PM25.NC2018 <- read.csv(
+  file = here('Data/Raw/EPAair_PM25_NC2018_raw.csv'), 
+  stringsAsFactors = T
+)
+
+EPAair.PM25.NC2019 <- read.csv(
+  file = here('Data/Raw/EPAair_PM25_NC2019_raw.csv'), 
+  stringsAsFactors = T
+)
 #2 
-
+glimpse(EPAair.O3.NC2018)
+glimpse(EPAair.O3.NC2019)
+glimpse(EPAair.PM25.NC2018)
+glimpse(EPAair.PM25.NC2019)
 ```
 
 
@@ -54,13 +77,34 @@ The completed exercise is due on Thursday, Sept 28th @ 5:00pm.
 
 ```{r}
 #3
+EPAair.O3.NC2018$Date = mdy(EPAair.O3.NC2018$Date)
+EPAair.O3.NC2019$Date = mdy(EPAair.O3.NC2019$Date)
+EPAair.PM25.NC2018$Date = mdy(EPAair.PM25.NC2018$Date)
+EPAair.PM25.NC2019$Date = mdy(EPAair.PM25.NC2019$Date)
 
 #4
+EPAair.O3.NC2018.processed <- select(EPAair.O3.NC2018, c(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE))
+EPAair.O3.NC2019.processed <- select(EPAair.O3.NC2019, c(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE))
+EPAair.PM25.NC2018.processed <- select(EPAair.PM25.NC2018, c(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE))
+EPAair.PM25.NC2019.processed <- select(EPAair.PM25.NC2019, c(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE))
 
 #5
+EPAair.PM25.NC2018.processed$AQS_PARAMETER_DESC <- 'PM2.5'
+EPAair.PM25.NC2019.processed$AQS_PARAMETER_DESC <- 'PM2.5'
 
 #6
-
+write.csv(EPAair.O3.NC2018.processed, 
+          file = here('Data/Processed/EPAair_O3_NC2018_processed.csv'),
+          row.names = FALSE)
+write.csv(EPAair.O3.NC2019.processed, 
+          file = here('Data/Processed/EPAair_O3_NC2019_processed.csv'),
+          row.names = FALSE)
+write.csv(EPAair.PM25.NC2018.processed, 
+          file = here('Data/Processed/EPAair_PM25_NC2018_processed.csv'),
+          row.names = FALSE)
+write.csv(EPAair.PM25.NC2019.processed, 
+          file = here('Data/Processed/EPAair_PM25_NC2019_processed.csv'),
+          row.names = FALSE)
 ```
 
 
