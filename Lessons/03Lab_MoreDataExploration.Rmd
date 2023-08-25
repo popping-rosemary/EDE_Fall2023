@@ -166,8 +166,8 @@ date_obj_today
 #Ex_3 - on your own...
 str_juneteenth <- "19 June 1865"
 #Since the format is month-day-year we will use function mdy()
-#date_juneteenth <- ()
-#date_juneteenth
+date_juneteenth <- dmy(str_juneteenth)
+date_juneteenth
 ```
 
 ```{r DateExercise2}
