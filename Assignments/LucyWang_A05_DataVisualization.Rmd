@@ -33,7 +33,8 @@ This exercise accompanies the lessons in Environmental Data Analytics on Data Vi
 ```{r initialize project}
 #1 
 # Import basic libraries 
-library(tidyverse);library(lubridate);library(here); library(cowplot)
+library(tidyverse);library(lubridate);library(here); library(cowplot); library(viridis)
+library(RColorBrewer)
 
 # verify home directory
 here()
@@ -69,7 +70,7 @@ PeterPaul.chem.nutrients$sampledate <- ymd(PeterPaul.chem.nutrients$sample)
 ```{r build plot theme}
 #3
 mytheme <- theme_light(base_size = 14) +
-  theme(axis.text = element_text(color = "orange"),
+  theme(axis.text = element_text(color = "black"),
         plot.title = element_text(hjust = 0.5), 
         legend.position = "top")
 ```
@@ -156,7 +157,19 @@ ggplot(subset(Niwot.Litter,
   mytheme
  
 #7
-
+ggplot(subset(Niwot.Litter, 
+              functionalGroup=='Needles'),
+       aes(y=dryMass,
+           x=collectDate))+ 
+  geom_point()+
+  ggtitle('Dry Mass of Needle Litter by NLCD Class')+
+  ylab('Dry Mass')+ 
+  xlab('Date')+ 
+  facet_wrap(vars(nlcdClass), nrow = 3)+
+  mytheme+ 
+  theme(strip.background = element_rect(
+    fill="orange"))
+  
 
 ```
 Question: Which of these plots (6 vs. 7) do you think is more effective, and why? 
