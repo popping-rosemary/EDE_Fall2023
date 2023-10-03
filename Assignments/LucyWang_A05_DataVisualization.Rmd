@@ -174,4 +174,4 @@ ggplot(subset(Niwot.Litter,
 ```
 Question: Which of these plots (6 vs. 7) do you think is more effective, and why? 
 
-> Answer:
+> Answer:#6 plot is more effective. First, the dry mass trend over the years can be more directly observed. Second, as three NLCD classes displayed in one axis, it is easier to compare the dry mass among the three. 
