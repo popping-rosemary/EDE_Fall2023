@@ -69,7 +69,7 @@ PeterPaul.chem.nutrients$sampledate <- ymd(PeterPaul.chem.nutrients$sample)
 ```{r build plot theme}
 #3
 mytheme <- theme_light(base_size = 14) +
-  theme(axis.text = element_text(color = "blue"),
+  theme(axis.text = element_text(color = "orange"),
         plot.title = element_text(hjust = 0.5), 
         legend.position = "top")
 ```
@@ -99,7 +99,38 @@ Tip:
 
 ```{r Create boxplots}
 #5 
+# create boxplots for temperature, TP, and TN 
+plot.temp <- ggplot(PeterPaul.chem.nutrients, 
+       aes(x=factor(PeterPaul.chem.nutrients$month, levels=1:12, labels = month.abb), 
+           y=temperature_C, 
+           color = lakename))+ 
+  geom_boxplot()+
+  ylab('Temperature')+
+  mytheme+ 
+  theme(axis.title.x = element_blank())
 
+plot.tp <- ggplot(PeterPaul.chem.nutrients, 
+       aes(x=factor(PeterPaul.chem.nutrients$month, levels=1:12, labels = month.abb), 
+           y=tp_ug, 
+           color = lakename))+ 
+  geom_boxplot() +
+  ylab('TP')+
+  mytheme+
+  theme(legend.position = "none", axis.title.x = element_blank() )
+
+plot.tn <- ggplot(PeterPaul.chem.nutrients, 
+       aes(x=factor(PeterPaul.chem.nutrients$month, levels=1:12, labels = month.abb), 
+           y=tn_ug, 
+           color = lakename))+ 
+  geom_boxplot()+
+  ylab('TN')+
+  xlab('Month')+ 
+  mytheme+ 
+  theme(legend.position = "none")
+
+# Create a cowplot that conbines the three plots 
+plot_grid(plot.temp, plot.tp, plot.tn, nrow = 3, align = 'h', rel_heights = c(1.25, 1))+ 
+  theme(legend.position = 'bottom')
 ```
 
 Question: What do you observe about the variables of interest over seasons and between lakes? 
