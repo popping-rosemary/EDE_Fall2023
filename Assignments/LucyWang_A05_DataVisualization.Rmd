@@ -34,7 +34,6 @@ This exercise accompanies the lessons in Environmental Data Analytics on Data Vi
 #1 
 # Import basic libraries 
 library(tidyverse);library(lubridate);library(here); library(cowplot); library(viridis)
-library(RColorBrewer)
 
 # verify home directory
 here()
@@ -100,7 +99,7 @@ Tip:
 
 ```{r Create boxplots}
 #5 
-# create boxplots for temperature, TP, and TN 
+# create boxplot for temperature
 plot.temp <- ggplot(PeterPaul.chem.nutrients, 
        aes(x=factor(PeterPaul.chem.nutrients$month, levels=1:12, labels = month.abb), 
            y=temperature_C, 
@@ -111,6 +110,7 @@ plot.temp <- ggplot(PeterPaul.chem.nutrients,
   mytheme+ 
   theme(axis.title.x = element_blank())
 
+# create boxplot for TP
 plot.tp <- ggplot(PeterPaul.chem.nutrients, 
        aes(x=factor(PeterPaul.chem.nutrients$month, levels=1:12, labels = month.abb), 
            y=tp_ug, 
@@ -120,6 +120,7 @@ plot.tp <- ggplot(PeterPaul.chem.nutrients,
   mytheme+
   theme(legend.position = "none", axis.title.x = element_blank() )
 
+# create boxplot for TN 
 plot.tn <- ggplot(PeterPaul.chem.nutrients, 
        aes(x=factor(PeterPaul.chem.nutrients$month, levels=1:12, labels = month.abb), 
            y=tn_ug, 
@@ -131,7 +132,7 @@ plot.tn <- ggplot(PeterPaul.chem.nutrients,
   theme(legend.position = "none")
 
 # Create a cowplot that combines the three plots 
-plot_grid(plot.temp, plot.tp, plot.tn, nrow = 3, align = 'h', rel_heights = c(1.25, 1))
+plot_grid(plot.temp, plot.tp, plot.tn, nrow = 3, axis = "b", align = 'h', rel_heights = c(1.25, 1))
 ```
 
 Question: What do you observe about the variables of interest over seasons and between lakes? 
@@ -169,7 +170,6 @@ ggplot(subset(Niwot.Litter,
   mytheme+ 
   theme(strip.background = element_rect(
     fill="orange"))
-  
 
 ```
 Question: Which of these plots (6 vs. 7) do you think is more effective, and why? 
