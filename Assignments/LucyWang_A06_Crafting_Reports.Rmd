@@ -84,10 +84,10 @@ summary_Ozone <- epa_data %>%
 #Use the `kable` function to produce the 2 tables in markdown format
 knitr::kable(summary_PM25, 
              caption = "Mean Particulates (2.5mm)", 
-             col.names = c("County", "µg/m3"))
+             col.names = c("County", "$\\mu g/m^3$"))
 knitr::kable(summary_Ozone, 
              caption = "Mean Ozone", 
-             col.names = c("County", "µg/m3"))
+             col.names = c("County", "$\\mu g/m^3$"))
 ```
 
 ---
@@ -96,8 +96,23 @@ knitr::kable(summary_Ozone,
 
 Create two separate code chunks that create boxplots of the distribution of Ozone levels by month using, one for only records collected in 2018 and one for records in 2019. Customize the chunk options such that the final figures are displayed but not the code used to generate the figures. In addition, align the plots on the left side of the page and set the figure heights so both plots fit on the same page with minimal space remaining. Lastly, add a `fig.cap` chunk option to add a caption (title) to your plot that will display underneath the figure.
 
+```{r boxplot 2018, echo=FALSE, warning = FALSE, fig.height = 3, fig.align='left', fig.cap="Monthly Ozone, 2018"}
+Ozone_2018 <- epa_data %>%
+  filter(Year == 2018)
+Ozone_2018_boxpot <- ggplot(Ozone_2018, 
+                            aes(x= Month, y=Ozone))+
+  geom_boxplot()+
+  ylab("Concentration (µg/m3)")
+```
 
-
+```{r boxplot 2019, echo=FALSE, warning = FALSE, fig.height = 3, echo = FALSE, fig.align='left', fig.cap="Montly Ozone, 2019"}
+Ozone_2019 <- epa_data %>%
+  filter(Year == 2019)
+Ozone_2019_boxpot <- ggplot(Ozone_2019, 
+                            aes(x= Month, y=Ozone))+
+  geom_boxplot()+
+  ylab("Concentration (µg/m3)")
+```
 ---
 \newpage
 
