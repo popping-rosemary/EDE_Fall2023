@@ -26,7 +26,11 @@ output: pdf_document
 Using markdown, create a table beneath the `Table: EPA Air Quality` line below that summarizes the metadata of the EPA Air Quality data. The first column should have the header "Item" and should include the the three metadata attribute item names: "Source", "Date", and "Filename". The second column should have the header "Value" and include the metadata values: "EPA Air Quality System (AQS)", "2018-2019", and "EPAair_O3_PM25_NC1819_Processed.csv". The first column should be aligned to the right and the second to the left.
 
 Table: EPA Air Quality
-
+Item  | Value
+------------- | -------------
+Source | EPA Air Quality System (AQS)
+Date  | 2018-2019
+Filename  | EPAair_O3_PM25_NC1819_Processed.csv
 
 ---
 
