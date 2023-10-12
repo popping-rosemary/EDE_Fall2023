@@ -35,7 +35,6 @@ Filename  | EPAair_O3_PM25_NC1819_Processed.csv
 :EPA Air Quality
 
 ---
----
 
 ## Task 2 - Import packages and data, suppressing messages
 
