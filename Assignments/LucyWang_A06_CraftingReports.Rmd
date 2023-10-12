@@ -110,7 +110,7 @@ Ozone_2018_boxplot <- ggplot(subset(epa_data, Year == 2018),
 print(Ozone_2018_boxplot)
 ```
 
-```{r boxplot 2019, echo=FALSE, warning = FALSE, fig.height = 3, fig.align='left', fig.cap="Montly Ozone, 2019"}
+```{r boxplot 2019, echo=FALSE, warning = FALSE, fig.height = 3, fig.align='left', fig.cap="Monthly Ozone, 2019"}
 
 Ozone_2019_boxplot <- ggplot(subset(epa_data, Year == 2019), 
                             aes(x= factor(Month, levels=1:12, labels=month.abb), y=Ozone))+
