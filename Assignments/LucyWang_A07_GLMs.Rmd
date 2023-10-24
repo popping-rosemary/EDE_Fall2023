@@ -1,6 +1,6 @@
 ---
 title: "Assignment 7: GLMs (Linear Regressios, ANOVA, & t-tests)"
-author: "Student Name"
+author: "Lucy Wang"
 date: "Fall 2023"
 output: pdf_document
 geometry: margin=2.54cm
@@ -27,11 +27,19 @@ This exercise accompanies the lessons in Environmental Data Analytics on general
 
 ```{r setup2}
 #1
+library(tidyverse)
+library(agricolae)
+library(here)
+here()
 
+NTL.Lake.ChemistryPhysics <- read.csv(here("Data/Raw/NTL-LTER_Lake_ChemistryPhysics_Raw.csv"), stringsAsFactors = TRUE)
 
 #2
-
-
+mytheme <- theme_classic(base_size = 14) +
+  theme(axis.text = element_text(color = "black"), 
+        plot.title = element_text(hjust = 0.5), 
+        legend.position = "top")
+theme_set(mytheme)
 ```
 
 ## Simple regression
@@ -39,8 +47,8 @@ Our first research question is: Does mean lake temperature recorded during July 
 
 3. State the null and alternative hypotheses for this question:
 > Answer:
-H0: 
-Ha: 
+H0: There is no significant change in mean lake tempeatures during July across all lakes. 
+Ha: This is a significant change in mean lake temperatures during July across lakes.  
 
 
 4.  Wrangle your NTL-LTER dataset with a pipe function so that the records meet the following criteria: 
@@ -52,7 +60,9 @@ Ha:
 
 ```{r scatterplot}
 #4
-
+NTL.Lake.ChemPhys.July <- 
+  NTL.Lake.ChemistryPhysics %>%
+  filter(sampledate = )
 
 #5
 
