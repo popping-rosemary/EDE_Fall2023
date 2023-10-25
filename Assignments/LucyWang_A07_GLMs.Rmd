@@ -31,7 +31,6 @@ library(tidyverse)
 library(agricolae)
 library(here)
 library(lubridate)
-library(RColorBrewer)
 here()
 
 NTL.Lake.ChemistryPhysics <- read.csv(here("Data/Raw/NTL-LTER_Lake_ChemistryPhysics_Raw.csv"), stringsAsFactors = TRUE)
