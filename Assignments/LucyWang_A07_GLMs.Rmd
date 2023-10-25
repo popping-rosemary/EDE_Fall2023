@@ -196,7 +196,12 @@ Lake.groups
 18. Wrangle the July data to include only records for Crampton Lake and Ward Lake. Run the two-sample T-test on these data to determine whether their July temperature are same or different. What does the test say? Are the mean temperatures for the lakes equal? Does that match you answer for part 16?
 
 ```{r t.test}
+NTL.July.CramptionWard <- NTL.Lake.ChemPhys.July %>%
+  filter(lakename %in% c('Crampton Lake', 'Ward Lake'))
+
+CramptonWard.twosample <- t.test(NTL.July.CramptionWard$temperature_C ~ NTL.July.CramptionWard$lakename)
+CramptonWard.twosample
 
 ```
 
->Answer: 
+>Answer: The p value is 0.72, which is greater than 0.05, which means that we cannot reject the null hypothesis. The mean temperature between the two lakes are the same. This result matches with the finding in the HSD test -- the mean temperatures of Ward Lake and Crampton Lake are identical. 
