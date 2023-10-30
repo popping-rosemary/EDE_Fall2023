@@ -58,8 +58,8 @@ Temp_BR <- read.csv(here("Data/Raw/tas_1901_2016_BRA.csv"), stringsAsFactors = T
 Rainfall_BR_processed <-
   Rainfall_BR %>% 
   rename( Rainfall = Rainfall....MM.) %>% 
-  separate(Statistics,c("Null","Month","Null2")," ") %>% 
-  mutate( Date = my(paste0(Month,"-",Year))) %>% 
+  separate(Statistics,c("Null","Month","Null2")," ") %>% # separate the statistics column 
+  mutate( Date = my(paste0(Month,"-",Year))) %>% # month-year
   select(Date,Rainfall)
 
 #Exercise 3: Repeat exercise 2 to the temperature dataset.
@@ -83,16 +83,21 @@ BR_complete <- inner_join(Rainfall_BR_processed,Temp_BR_processed)
 ```{r}
 
 #Exercise 5: Check if there is any missing data for both temperature and rainfall series.
-
-
-
+# create a sequence, equally distributed by month, join the sequence of date with the columns 
+summary(BR_complete$Rainfall)
+summary(BR_complete$Temperature_C)
 
 #Exercise 6: Plot both series over time on separate plots. Add a trend line using geom_smooth(). Can you say something about the trend just by visualizing the data?
 
+ggplot(BR_complete, aes(x = Date, y = Rainfall))+ 
+  geom_line()+
+  geom_smooth()
+# seasonality presents 
 
-
-
-
+ggplot(BR_complete, aes(x=Date, y = Temperature_C))+ 
+  geom_line()+
+  geom_smooth()
+# temperature has an upward trend 
 
 ```
 
@@ -101,7 +106,11 @@ BR_complete <- inner_join(Rainfall_BR_processed,Temp_BR_processed)
 ```{r}
 #Exercise 7: Create a time series objects for each series using ts(). Make sure you specify the starting point and frequency.
 
+Rainfall_ts <- ts(BR_complete$Rainfall, start = c(1901, 1), frequency = 12)
+plot(Rainfall_ts)
 
+Temp_ts <- ts(BR_complete$Temperature_C, start = c(1901, 1), frequency = 12)
+plot(Temp_ts)
 
 ```
 
@@ -120,27 +129,28 @@ The `stl` function decomposes the time series object into its component parts. W
 
 ```{r}
 
-# Exercise 8: Use the stl() function to decompose both series. 
+# Exercise 8: Use the stl() function to decompose both series.
 # Visualize the decomposed series using plot(). What components can you identify?
 
+Rainfall_decomposed <- stl(Rainfall_ts, s.window = 'periodic')
+plot(Rainfall_decomposed)
+
+Temp_decomposed <- stl(Temp_ts, s.window = 'periodic')
+plot(Temp_decomposed)
 
 
-
-
-
-# Exercise 9: Use the times series object generated with the stl() to extract the 
+# Exercise 9: Use the times series object generated with the stl() to extract the
 # components of each series and turn them into data frames.
 
-
-
-
-
+Rainfall_components <-
+  as.data.frame(Rainfall_decomposed$time.series[, 1:3])
+Temp_components <- as.data.frame(Temp_decomposed$time.series[, 1:3])
 
 # Exercise 10: Visualize how the trend maps onto the data for both series
 
-
-
-
+ggplot(Rainfall_components) +
+  geom_line(aes(x = Date, y = Trend)) +
+  geom_line(aes(x = Date, ))
 
 
 ```
