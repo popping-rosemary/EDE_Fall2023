@@ -58,6 +58,22 @@ theme_set(mytheme)
 
 ```{r, message = FALSE}
 #1
+file_list <- list.files('~/Documents/EDE_Fall2023/Data/Raw/Ozone_TimeSeries', pattern = "*.csv", recursive = TRUE, full.names = TRUE)
+print(length(file_list))
+for (i in length(file_list))
+{
+  if (i == 1){
+     file_i <- read.csv(file_list[i], stringsAsFactors = T)
+     GaringerOzone <- file_i
+  }
+  else{
+    file_i <- read.csv(file_list[i], stringsAsFactors = T)
+    GaringerOzone <- inner_join(GaringerOzone, file_i)
+      }
+}
+
+list_data <- lapply(file_list, read.csv)
+GaringerOzone <- inner_join(list_data)
 
 ```
 
