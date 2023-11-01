@@ -56,26 +56,20 @@ theme_set(mytheme)
 
 2. Import the ten datasets from the Ozone_TimeSeries folder in the Raw data folder. These contain ozone concentrations at Garinger High School in North Carolina from 2010-2019 (the EPA air database only allows downloads for one year at a time). Import these either individually or in bulk and then combine them into a single dataframe named `GaringerOzone` of 3589 observation and 20 variables. 
 
-```{r, message = FALSE}
+```{r read files, message = FALSE}
 #1
-file_list <- list.files('~/Documents/EDE_Fall2023/Data/Raw/Ozone_TimeSeries', pattern = "*.csv", recursive = TRUE, full.names = TRUE)
+file_list <- list.files('~/Documents/EDE_Fall2023/Data/Raw/Ozone_TimeSeries', 
+                        pattern = "*.csv", recursive = TRUE, full.names = TRUE)
 
 csv_reader <- function(i){
   file_i <- read.csv(file_list[i], stringsAsFactors = TRUE)
   }
 
-GaringerOzone <- csv_reader(1)
-  
-for (i in length(file_list)){
-  #file_i <- csv_reader(i)
+GaringerOzone <- data.frame()
+
+for (i in 1:length(file_list)){
   GaringerOzone <- rbind(GaringerOzone, csv_reader(i))
 }
-
-
-
-#list_data <- lapply(file_list, read.csv)
-#GaringerOzone <- inner_join(list_data)
-
 ```
 
 ## Wrangle
@@ -90,13 +84,22 @@ for (i in length(file_list)){
 
 ```{r}
 # 3
+GaringerOzone$Date <- mdy(GaringerOzone$Date)
 
 # 4
+GaringerOzone <- GaringerOzone %>%
+  select(Date, Daily.Max.8.hour.Ozone.Concentration, DAILY_AQI_VALUE)
 
 # 5
-
+Days <- as.data.frame(
+  seq(from = as.Date("2010-01-01"), 
+      to = as.Date("2019-12-31"), 
+      by ="day")
+  )
+names(Days)[1] <- 'Date'
+  
 # 6
-
+GaringerOzone <- left_join(Days, GaringerOzone)
 
 ```
 
@@ -106,10 +109,13 @@ for (i in length(file_list)){
 
 ```{r}
 #7
-
+ggplot(GaringerOzone, aes(x = Date, y = Daily.Max.8.hour.Ozone.Concentration))+ 
+  geom_line()+ 
+  geom_smooth()+ 
+  ylab("Ozone Concentration")
 ```
 
->Answer:
+>Answer:No, the trend is not very clear. Though the ozone concentration in the early 2010s is slightly higher, we do not observe obvious trend from this plot. 
 
 ## Time Series Analysis
 
@@ -119,7 +125,19 @@ Study question: Have ozone concentrations changed over the 2010s at this station
 
 ```{r}
 #8
+# Adding new column with no missing obs, just for illustration purpose
+# In real applications you will simply replace NAs
+GaringerOzone_clean <- 
+  GaringerOzone %>% 
+  mutate( AWND.clean = zoo::na.approx(AWND) )
 
+summary(wind_data_clean$AWND.clean)
+#Note the NA is gone
+
+ggplot(GaringerOzone_Clean) +
+  geom_line(aes(x = DATE, y = AWND.clean), color = "red") +
+  geom_line(aes(x = DATE, y = AWND), color = "black") +
+  ylab("Average Ozone Concentration") 
 ```
 
 > Answer: 
