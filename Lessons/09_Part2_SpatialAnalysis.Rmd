@@ -132,7 +132,7 @@ head(huc8_sf)
 #View the data as a map, colored by the acreage in each
 ggplot(huc8_sf) + 
   geom_sf(aes(fill=ACRES))+
-  scale_fill_viridis_c()
+  scale_fill_viridis_c().
 
 mapView(huc8_sf, zcol = 'ACRES')
 
