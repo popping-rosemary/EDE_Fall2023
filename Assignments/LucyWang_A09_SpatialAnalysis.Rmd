@@ -170,7 +170,7 @@ Now we can examine where the flooding appears most acute by visualizing gage hei
 #Map the points, sized by gage height
 mapview(county_sf, 
         zcol = 'NAME') + 
-  mapview(gage_sf_join, cex='gage_ht')
+  mapview(gage_sf_join, cex='gage_ht', col.regions='pink')
 ```
 
 ---
