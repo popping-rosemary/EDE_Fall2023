@@ -1,6 +1,6 @@
 ---
 title: "Assignment 10: Data Scraping"
-author: "Student Name"
+author: "Lucy Wang"
 output: pdf_document
 ---
 
@@ -25,7 +25,9 @@ This exercise accompanies the lessons in Environmental Data Analytics on data sc
 
 ```{r 1. Project Setup, message = FALSE}
 #1 
-
+library(tidyverse);library(lubridate);library(viridis);library(here)
+library(rvest)
+here()
 
 ```
 
@@ -38,7 +40,7 @@ Indicate this website as the as the URL to be scraped. (In other words, read the
 
 ```{r set.the.scraping.website}
 #2 
-
+theURL <- read_html('https://www.ncwater.org/WUDC/app/LWSP/report.php?pwsid=03-32-010&year=2022')
 ```
 
 3. The data we want to collect are listed below:
@@ -57,7 +59,18 @@ In the code chunk below scrape these values, assigning them to four separate var
 
 ```{r scrape.the.data}
 #3 
-
+the_name <- theURL %>% 
+  html_nodes('div+ table tr:nth-child(1) td:nth-child(2)') %>% 
+  html_text()
+PWSID <- theURL %>% 
+  html_nodes('td tr:nth-child(1) td:nth-child(5)') %>% 
+  html_text()
+the_ownership <- theURL %>% 
+  html_nodes('div+ table tr:nth-child(2) td:nth-child(4)') %>% 
+  html_text()
+max_day <- theURL %>% 
+  html_nodes('th~ td+ td , th~ td+ td') %>% 
+  html_text()
 ```
 
 
@@ -71,16 +84,61 @@ In the code chunk below scrape these values, assigning them to four separate var
 
 ```{r create.a.dataframe.from.scraped.data}
 #4 
+the_months <- theURL %>% 
+  html_nodes('.fancy-table:nth-child(31) tr+ tr th') %>% 
+  html_text()
+
+LWSP_df <- data.frame(
+  'Month'= month.name[match(the_months,month.abb)],
+  'Water_System_Name' = rep(the_name,12),
+  'PWSID' = rep(PWSID,12), 
+  'Ownership' = rep(the_ownership,12),
+  'Max_Day_Use' = as.numeric(max_day), stringsAsFactors = T
+) %>% 
+  mutate(Date = my(paste(Month,'-',2022))) %>% 
+  arrange(Date)
 
 #5 
-
+ggplot(LWSP_df, aes(x=Date, y=Max_Day_Use))+
+  geom_line()
 ```
 
 6. Note that the PWSID and the year appear in the web address for the page we scraped. Construct a function using your code above that can scrape data for any PWSID and year for which the NC DEQ has data. **Be sure to modify the code to reflect the year and site (pwsid) scraped**.
 
 ```{r construct.a.scraping.function}
 #6. 
-
+scrape_data <- function(the_PWSID, the_year){
+  the_url <- paste0('https://www.ncwater.org/WUDC/app/LWSP/report.php?pwsid=', the_PWSID, '&year=', the_year)
+  the_website <- read_html(the_url)
+  
+  the_name <- the_website %>% 
+    html_nodes('div+ table tr:nth-child(1) td:nth-child(2)') %>% 
+    html_text()
+  PWSID <- the_website %>% 
+    html_nodes('td tr:nth-child(1) td:nth-child(5)') %>% 
+    html_text()
+  the_ownership <- the_website %>% 
+    html_nodes('div+ table tr:nth-child(2) td:nth-child(4)') %>% 
+    html_text()
+  max_day <- the_website %>% 
+    html_nodes('th~ td+ td , th~ td+ td') %>% 
+    html_text()
+  the_months <- the_website %>% 
+    html_nodes('.fancy-table:nth-child(31) tr+ tr th') %>% 
+    html_text()
+  
+  the_df <- data.frame(
+    'Month'= month.name[match(the_months,month.abb)],
+    'Water_System_Name' = rep(the_name,12),
+    'PWSID' = rep(PWSID,12), 
+    'Ownership' = rep(the_ownership,12),
+    'Max_Day_Use' = as.numeric(max_day), stringsAsFactors = T
+  ) %>% 
+    mutate(Date = my(paste(Month,'-',the_year))) %>% 
+    arrange(Date)
+  
+  return(the_df)
+}
 
 ```
 
@@ -88,7 +146,7 @@ In the code chunk below scrape these values, assigning them to four separate var
 
 ```{r fetch.and.plot.Durham.2015.data}
 #7 
-
+Durham_2015 <- scrape_data('03-32-010',2015)
 
 ```
 
@@ -96,8 +154,11 @@ In the code chunk below scrape these values, assigning them to four separate var
 
 ```{r fetch.and.plot.Asheville.2015.data}
 #8 
+Asheville_2015 <- scrape_data('01-11-010', 2015)
+Durham_Asheville_2015 <- rbind(Durham_2015, Asheville_2015)
 
-
+ggplot(Durham_Asheville_2015, aes(x=Date,y=max_day,colors=Water_System_Name))+
+  geom_line()
 ```
 
 
