@@ -123,9 +123,10 @@ scrape_data <- function(the_PWSID, the_year){
   max_day <- the_website %>% 
     html_nodes('th~ td+ td , th~ td+ td') %>% 
     html_text()
-  the_months <- the_website %>% 
-    html_nodes('.fancy-table:nth-child(30) tr+ tr th') %>% 
-    html_text()
+  the_months <- c('Jan', 'May', 'Sep', 
+                  'Feb', 'Jun', 'Oct', 
+                  'Mar', 'Jul', 'Nov', 
+                  'Apr', 'Aug', 'Dec')
   
   the_df <- data.frame(
     'Month'= month.name[match(the_months,month.abb)],
@@ -157,7 +158,7 @@ Durham_2015 <- scrape_data('03-32-010',2015)
 Asheville_2015 <- scrape_data('01-11-010', 2015)
 Durham_Asheville_2015 <- rbind(Durham_2015, Asheville_2015)
 
-ggplot(Durham_Asheville_2015, aes(x=Date,y=max_day,colors=Water_System_Name))+
+ggplot(Durham_Asheville_2015, aes(x=Date,y=Max_Day_Use, colors=Water_System_Name))+
   geom_line()
 ```
 
