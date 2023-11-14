@@ -100,7 +100,10 @@ LWSP_df <- data.frame(
 
 #5 
 ggplot(LWSP_df, aes(x=Date, y=Max_Day_Use))+
-  geom_line()
+  geom_line()+ 
+ labs(title = 'Durham Water Withdrawals (2022)',
+   y="Water Withdrawal",
+   x="Date")
 ```
 
 6. Note that the PWSID and the year appear in the web address for the page we scraped. Construct a function using your code above that can scrape data for any PWSID and year for which the NC DEQ has data. **Be sure to modify the code to reflect the year and site (pwsid) scraped**.
@@ -160,7 +163,9 @@ Durham_Asheville_2015 <- rbind(Durham_2015, Asheville_2015)
 
 ggplot(Durham_Asheville_2015, aes(x=Date,y=Max_Day_Use,color=Water_System_Name))+
   geom_line()+
-  ylab('Water Withdrawal')
+    labs(title = 'Water Withdrawal Durham vs. Asheville (2015)',
+     y="Water Withdrawal",
+     x="Date")
 ```
 
 
