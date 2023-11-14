@@ -124,7 +124,7 @@ scrape_data <- function(the_PWSID, the_year){
     html_nodes('th~ td+ td , th~ td+ td') %>% 
     html_text()
   the_months <- the_website %>% 
-    html_nodes('.fancy-table:nth-child(31) tr+ tr th') %>% 
+    html_nodes('.fancy-table:nth-child(30) tr+ tr th') %>% 
     html_text()
   
   the_df <- data.frame(
