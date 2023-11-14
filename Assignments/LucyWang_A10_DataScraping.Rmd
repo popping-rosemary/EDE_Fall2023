@@ -158,8 +158,9 @@ Durham_2015 <- scrape_data('03-32-010',2015)
 Asheville_2015 <- scrape_data('01-11-010', 2015)
 Durham_Asheville_2015 <- rbind(Durham_2015, Asheville_2015)
 
-ggplot(Durham_Asheville_2015, aes(x=Date,y=Max_Day_Use, colors=Water_System_Name))+
-  geom_line()
+ggplot(Durham_Asheville_2015, aes(x=Date,y=Max_Day_Use,color=Water_System_Name))+
+  geom_line()+
+  ylab('Water Withdrawal')
 ```
 
 
@@ -169,10 +170,21 @@ ggplot(Durham_Asheville_2015, aes(x=Date,y=Max_Day_Use, colors=Water_System_Name
 
 ```{r fetch.and.plot.Asheville.multiyear.data }
 #9 
+the_years <- c(2010:2021)
+Asheville_PWSID <- '01-11-010'
 
+the_dfs <- lapply(the_years, function(year) scrape_data(Asheville_PWSID, the_year = year))
 
+Asheville_df <- bind_rows(the_dfs)
+
+ggplot(Asheville_df, aes(x=Date, y=Max_Day_Use))+
+  geom_line()+
+  geom_smooth(method='loess', se=FALSE)+
+  labs(title = 'Asheville Water Withdrawal (2010-2021)',
+     y="Water Withdrawal",
+     x="Date")
 ```
 
 Question: Just by looking at the plot (i.e. not running statistics), does Asheville have a trend in water usage over time?
 > Answer:
->
+> It started with a slight decrease in the early 2010s but started increasing since 2015. 
