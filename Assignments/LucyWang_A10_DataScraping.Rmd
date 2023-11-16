@@ -100,8 +100,8 @@ LWSP_df <- data.frame(
 
 #5 
 ggplot(LWSP_df, aes(x=Date, y=Max_Day_Use))+
-  geom_line()+ 
- labs(title = 'Durham Water Withdrawals (2022)',
+  geom_line()+  
+  labs(title = 'Durham Water Withdrawals (2022)',
    y="Water Withdrawal",
    x="Date")
 ```
@@ -152,6 +152,11 @@ scrape_data <- function(the_PWSID, the_year){
 #7 
 Durham_2015 <- scrape_data('03-32-010',2015)
 
+ggplot(Durham_2015, aes(x=Date, y=Max_Day_Use))+
+  geom_line() +
+  labs(title = 'Water Withdrawal Durham (2015)',
+   y="Water Withdrawal",
+   x="Date")
 ```
 
 8. Use the function above to extract data for Asheville (PWSID = 01-11-010) in 2015. Combine this data with the Durham data collected above and create a plot that compares Asheville's to Durham's water withdrawals.
